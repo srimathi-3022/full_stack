@@ -23,6 +23,18 @@ export async function fetchProductsByCategory(category) {
   return data.products;
 }
 
+export async function addOrUpdateProduct(product) {
+  const res = await fetch(`${BASE_URL}/products`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(product),
+  });
+  if (!res.ok) throw new Error("Failed to save product");
+  return res.json();
+}
+
 export function formatPrice(price) {
   return `Rs. ${price.toLocaleString("en-IN")}`;
 }

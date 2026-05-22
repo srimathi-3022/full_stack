@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { fetchProductById, formatPrice } from "../services/productService";
 
 export default function ProductDetailPage() {
@@ -25,33 +25,73 @@ export default function ProductDetailPage() {
     }
   };
 
-  if (isLoading) return <div style={{ textAlign: "center", padding: "2rem" }}>Loading...</div>;
-  if (error || !product) return (
-    <div style={{ color: "red", padding: "1rem" }}>
-      <p>Error: {error || "Product not found"}</p>
-      <Link to="/products">Back to Products</Link>
-    </div>
-  );
+  if (isLoading) {
+    return (
+      <section className="inventory-page">
+        <div className="detail-page-shell skeleton-panel">
+          <div className="skeleton-line skeleton-title" />
+          <div className="skeleton-line skeleton-copy" />
+        </div>
+      </section>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="catalog-state catalog-state-error">
+        <p>Error: {error || "Product not found"}</p>
+        <Link className="ghost-action" to="/products">Back to Dashboard</Link>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ padding: "1rem", maxWidth: "600px", margin: "0 auto" }}>
-      <Link to="/products">← Back to Products</Link>
-
-      <h1>{product.name}</h1>
-      <p><strong>Brand:</strong> {product.brand}</p>
-      <p><strong>Category:</strong> {product.category}</p>
-      <p><strong>Price:</strong> {formatPrice(product.price)}</p>
-      <p>
-        <strong>Stock:</strong>{" "}
-        {product.stock === 0 ? (
-          <span style={{ background: "red", color: "white", padding: "2px 8px", borderRadius: "4px" }}>
-            Out of Stock
+    <section className="inventory-page">
+      <div className="detail-page-shell">
+        <div className="detail-page-header">
+          <Link className="ghost-action" to="/products">
+            Back to Dashboard
+          </Link>
+          <span className="detail-status">
+            {product.stock === 0 ? "Out of Stock" : "In Stock"}
           </span>
-        ) : (
-          `${product.stock} in stock`
-        )}
-      </p>
-      <p><strong>Rating:</strong> {product.rating} / 5</p>
-    </div>
+        </div>
+
+        <div className="detail-record">
+          <div className="detail-record-main">
+            <span className="panel-kicker">Product #{product.id}</span>
+            <h1>{product.name}</h1>
+            <p>{product.brand}</p>
+          </div>
+
+          <div className="detail-square-card">
+            <div className="detail-top">
+              <span>Inventory</span>
+              <strong>{product.rating} / 5</strong>
+            </div>
+            <h2>{product.name}</h2>
+            <p>{product.category}</p>
+            <div className="detail-grid">
+              <div>
+                <span>Brand</span>
+                <strong>{product.brand}</strong>
+              </div>
+              <div>
+                <span>Price</span>
+                <strong>{formatPrice(product.price)}</strong>
+              </div>
+              <div>
+                <span>Stock</span>
+                <strong>{product.stock} units</strong>
+              </div>
+              <div>
+                <span>Product ID</span>
+                <strong>#{product.id}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

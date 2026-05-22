@@ -32,8 +32,8 @@ async def adding_a_product_in_the_stock_list(product: Products):
         "stock": product.stock,
         "rating": product.rating
     }
-    new_product.pop("_id")
     result = products_collection.insert_one(new_product)
+    new_product.pop("_id", None)
 
     return {
         "message": "Product is successfully added to the stock list",
