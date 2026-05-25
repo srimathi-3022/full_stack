@@ -113,10 +113,16 @@ export default function ProductListPage() {
   }
 
   return (
-    <section>
-      <h1>Stockyard Dashboard</h1>
+    <section className="dashboard-page">
+      <div className="page-title">
+        <div>
+          <p className="eyebrow">Live Inventory</p>
+          <h1>Stockyard Dashboard</h1>
+        </div>
+        <Link className="primary-action" to="/products/add">Add Stock</Link>
+      </div>
 
-      <table border="1" cellPadding="10" cellSpacing="0" width="100%">
+      <table className="summary-table">
         <caption>Inventory Summary</caption>
         <thead>
           <tr>
@@ -134,16 +140,10 @@ export default function ProductListPage() {
         </tbody>
       </table>
 
-      <p>
-        <Link to="/products/add">Add Stock</Link>
-      </p>
-
-      <hr />
-
-      <section>
+      <section className="inventory-panel">
         <h2>All Inventory Items</h2>
 
-        <fieldset>
+        <fieldset className="toolbar">
           <legend>Search and Sort</legend>
           <p>
             <label>
@@ -174,7 +174,7 @@ export default function ProductListPage() {
           </p>
         </fieldset>
 
-        <p>{visibleProducts.length} results</p>
+        <p className="result-count">{visibleProducts.length} results</p>
 
         <CategoryFilter
           active={activeCategory}
@@ -183,7 +183,7 @@ export default function ProductListPage() {
           onChange={handleCategory}
         />
 
-        <table border="1" cellPadding="8" cellSpacing="0" width="100%">
+        <table className="inventory-table">
           <caption>Products</caption>
           <thead>
             <tr>

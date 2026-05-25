@@ -18,7 +18,7 @@ export default function CategoryFilter({
   onChange,
 }) {
   return (
-    <fieldset>
+    <fieldset className="category-filter">
       <legend>Categories</legend>
       <FilterBtn
         label="All"

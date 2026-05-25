@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { addOrUpdateProduct } from "../services/productService";
+import { addOrUpdateProduct, fetchAllProducts } from "../services/productService";
 
 const emptyForm = {
   name: "",
@@ -28,18 +28,49 @@ export default function ProductFormPage() {
     setError("");
     setNotice("");
 
+    const requestedStock = Number(form.stock);
     const payload = {
       name: form.name.trim(),
       category: form.category.trim(),
       brand: form.brand.trim(),
       price: Number(form.price),
-      stock: Number(form.stock),
+      stock: requestedStock,
       rating: Number(form.rating),
     };
 
     try {
+      let cappedRemoval = false;
+
+      if (requestedStock < 0) {
+        const products = await fetchAllProducts();
+        const currentProduct = products.find(
+          (product) =>
+            product.name.trim().toLowerCase() === payload.name.toLowerCase() &&
+            product.brand.trim().toLowerCase() === payload.brand.toLowerCase()
+        );
+
+        if (!currentProduct) {
+          throw new Error("Cannot remove stock because this product is not in inventory.");
+        }
+
+        const currentStock = Math.max(Number(currentProduct.stock) || 0, 0);
+        const requestedRemoval = Math.abs(requestedStock);
+        const allowedRemoval = Math.min(requestedRemoval, currentStock);
+
+        payload.stock = -allowedRemoval;
+        cappedRemoval = requestedRemoval > currentStock;
+
+        if (allowedRemoval === 0) {
+          throw new Error("This product is already out of stock.");
+        }
+      }
+
       const result = await addOrUpdateProduct(payload);
-      setNotice(result.message || "Inventory saved");
+      setNotice(
+        cappedRemoval
+          ? "Entered removal was more than current stock, so only available stock was removed. Product is now out of stock."
+          : result.message || "Inventory saved"
+      );
       setForm(emptyForm);
     } catch (err) {
       setError(err.message);
@@ -49,17 +80,20 @@ export default function ProductFormPage() {
   };
 
   return (
-    <section>
-      <h1>Add or Update Product</h1>
-      <p>
-        When product name and brand match an existing item, the API adds this
-        stock quantity to it.
-      </p>
-      <p>
-        <Link to="/products">Dashboard</Link>
-      </p>
+    <section className="form-page">
+      <div className="page-title">
+        <div>
+          <p className="eyebrow">Inventory Entry</p>
+          <h1>Add or Update Product</h1>
+          <p>
+            When product name and brand match an existing item, the API adds this
+            stock quantity to it.
+          </p>
+        </div>
+        <Link className="secondary-action" to="/products">Dashboard</Link>
+      </div>
 
-      <form onSubmit={handleSubmit}>
+      <form className="inventory-form" onSubmit={handleSubmit}>
         <fieldset>
           <legend>Product Details</legend>
 
@@ -134,8 +168,12 @@ export default function ProductFormPage() {
                     type="number"
                     value={form.stock}
                     onChange={(event) => updateForm("stock", event.target.value)}
-                    placeholder="0"
+                    placeholder="Use negative value to remove stock"
                   />
+                  <small>
+                    Example: enter -5 to remove 5 units. If you enter more than
+                    available stock, only the current stock will be removed.
+                  </small>
                 </td>
               </tr>
               <tr>
@@ -159,10 +197,10 @@ export default function ProductFormPage() {
           </table>
         </fieldset>
 
-        {notice && <p>{notice}</p>}
-        {error && <p role="alert">{error}</p>}
+        {notice && <p className="notice success">{notice}</p>}
+        {error && <p className="notice error" role="alert">{error}</p>}
 
-        <p>
+        <p className="form-actions">
           <button disabled={isSaving} type="submit">
             {isSaving ? "Saving..." : "Save Inventory"}
           </button>{" "}

@@ -9,7 +9,7 @@ async def adding_a_product_in_the_stock_list(product: Products):
 
     for existing_product in products_collection.find():
         if existing_product["name"] == product.name and existing_product["brand"] == product.brand:
-            updated_stock = existing_product["stock"] + product.stock
+            updated_stock = max(existing_product["stock"] + product.stock, 0)
             products_collection.update_one(
                 {"_id": existing_product["_id"]},
                 {"$set": {"stock": updated_stock}}
@@ -18,6 +18,12 @@ async def adding_a_product_in_the_stock_list(product: Products):
                 "message": "Product already exists in stock list",
                 "updated_stock": updated_stock
             }
+
+    if product.stock < 0:
+        raise HTTPException(
+            status_code=400,
+            detail="Cannot remove stock because this product is not in the stock list"
+        )
 
     # Auto-increment ID starting from 1
     count = products_collection.count_documents({})
