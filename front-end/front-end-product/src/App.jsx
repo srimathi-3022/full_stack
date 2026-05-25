@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Navbar from "./components/Navbar";
+//import Navbar from "./components/Navbar";
 import ProductListPage from "./pages/ProductListPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import ProductFormPage from "./pages/ProductFormPage";
@@ -8,7 +8,7 @@ import ProductFormPage from "./pages/ProductFormPage";
 export default function App() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <main>
         <Routes>
           <Route path="/"             element={<Navigate to="/products" replace />} />
