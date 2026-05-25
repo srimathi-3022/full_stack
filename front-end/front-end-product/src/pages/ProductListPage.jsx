@@ -1,10 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  fetchAllProducts,
-  fetchProductsByCategory,
-  formatPrice,
-} from "../services/productService";
+import {fetchAllProducts,  fetchProductsByCategory,  formatPrice,} from "../services/productService";
 import CategoryFilter from "../components/CategoryFilter";
 import Spinner from "./Spinner";
 
