@@ -1,40 +1,35 @@
+/**
+ * productService.js
+ * ─────────────────
+ * All API calls live here — never inside components.
+ * Satisfies Requirement 8.
+ */
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
-const BASE_URL = "http://localhost:8000";
-
-export async function fetchAllProducts() {
-  const res = await fetch(`${BASE_URL}/products`);
-  if (!res.ok) throw new Error("Failed to fetch products");
-  const data = await res.json();
-  return data.products;
-}
-
-export async function fetchProductById(id) {
-  const res = await fetch(`${BASE_URL}/products/${id}`);
-  if (!res.ok) throw new Error("Failed to fetch product");
-  const data = await res.json();
-  return data.product;
-}
-
-export async function fetchProductsByCategory(category) {
-  const res = await fetch(`${BASE_URL}/products/category/${encodeURIComponent(category)}`);
-  if (!res.ok) throw new Error("Failed to fetch products by category");
-  const data = await res.json();
-  return data.products;
-}
-
-export async function addOrUpdateProduct(product) {
-  const res = await fetch(`${BASE_URL}/products`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(product),
-  });
-  if (!res.ok) throw new Error("Failed to save product");
+async function request(path) {
+  const res = await fetch(`${BASE_URL}${path}`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.detail || `Request failed — ${res.status}`);
+  }
   return res.json();
 }
 
-export function formatPrice(price) {
-  return `Rs. ${price.toLocaleString("en-IN")}`;
+/** GET /products — returns array of all products */
+export async function fetchAllProducts() {
+  const data = await request("/products");
+  return data.products ?? [];
+}
+
+/** GET /products/{id} — returns a single product object */
+export async function fetchProductById(id) {
+  const data = await request(`/products/${id}`);
+  return data.product ?? data;
+}
+
+/** GET /products/category/{category} — returns array of products */
+export async function fetchProductsByCategory(category) {
+  const data = await request(`/products/category/${encodeURIComponent(category)}`);
+  return data.products ?? [];
 }
