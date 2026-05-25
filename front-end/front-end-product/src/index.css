@@ -1,0 +1,78 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #222;
+}
+
+main,
+header {
+  max-width: 1000px;
+  margin: auto;
+  background-color: white;
+  padding: 16px;
+}
+
+header h1 {
+  margin: 0;
+}
+
+a {
+  color: #0b5ed7;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+section {
+  margin-bottom: 20px;
+}
+
+fieldset {
+  margin: 16px 0;
+  padding: 12px;
+  border: 1px solid #ccc;
+}
+
+legend {
+  font-weight: bold;
+}
+
+input,
+select,
+button {
+  padding: 8px;
+  margin: 4px;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #999;
+  background-color: #eeeeee;
+}
+
+button[aria-pressed="true"] {
+  font-weight: bold;
+  border-color: #222;
+}
+
+table {
+  margin: 12px 0;
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #eeeeee;
+}
+
+th,
+td {
+  padding: 10px;
+}
+
+caption {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
