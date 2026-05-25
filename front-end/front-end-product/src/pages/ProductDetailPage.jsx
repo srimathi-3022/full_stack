@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import Spinner from "../components/Spinner";
+import Spinner from "./Spinner";
 import ErrorMessage from "../components/ErrorMessage";
 import { fetchProductById } from "../services/productService"; // Requirement 8
 
