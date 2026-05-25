@@ -49,113 +49,128 @@ export default function ProductFormPage() {
   };
 
   return (
-    <section className="inventory-page">
-      <div className="form-hero">
-        <div>
-          <span className="catalog-kicker">Stock Operation</span>
-          <h1>Add or Update Product</h1>
-          <p>
-            Use any category your inventory needs. When product name and brand
-            match an existing item, the API adds this stock quantity to it.
-          </p>
-        </div>
-        <Link className="secondary-action secondary-action-dark" to="/products">
-          Dashboard
-        </Link>
-      </div>
+    <section>
+      <h1>Add or Update Product</h1>
+      <p>
+        When product name and brand match an existing item, the API adds this
+        stock quantity to it.
+      </p>
+      <p>
+        <Link to="/products">Dashboard</Link>
+      </p>
 
-      <form className="dashboard-panel stock-form stock-form-page" onSubmit={handleSubmit}>
-        <div className="panel-header">
-          <div>
-            <span className="panel-kicker">Inventory Record</span>
-            <h2>Product Details</h2>
-          </div>
-        </div>
+      <form onSubmit={handleSubmit}>
+        <fieldset>
+          <legend>Product Details</legend>
 
-        <div className="form-grid">
-          <label>
-            Product Name
-            <input
-              required
-              value={form.name}
-              onChange={(event) => updateForm("name", event.target.value)}
-              placeholder="Product name"
-            />
-          </label>
+          <table cellPadding="8" cellSpacing="0">
+            <tbody>
+              <tr>
+                <th align="left">
+                  <label htmlFor="name">Product Name</label>
+                </th>
+                <td>
+                  <input
+                    id="name"
+                    required
+                    value={form.name}
+                    onChange={(event) => updateForm("name", event.target.value)}
+                    placeholder="Product name"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th align="left">
+                  <label htmlFor="brand">Brand</label>
+                </th>
+                <td>
+                  <input
+                    id="brand"
+                    required
+                    value={form.brand}
+                    onChange={(event) => updateForm("brand", event.target.value)}
+                    placeholder="Brand name"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th align="left">
+                  <label htmlFor="category">Category</label>
+                </th>
+                <td>
+                  <input
+                    id="category"
+                    required
+                    value={form.category}
+                    onChange={(event) => updateForm("category", event.target.value)}
+                    placeholder="Electronics, grocery, books..."
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th align="left">
+                  <label htmlFor="price">Price</label>
+                </th>
+                <td>
+                  <input
+                    id="price"
+                    required
+                    min="0"
+                    type="number"
+                    value={form.price}
+                    onChange={(event) => updateForm("price", event.target.value)}
+                    placeholder="0"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th align="left">
+                  <label htmlFor="stock">Stock Quantity</label>
+                </th>
+                <td>
+                  <input
+                    id="stock"
+                    required
+                    min="0"
+                    type="number"
+                    value={form.stock}
+                    onChange={(event) => updateForm("stock", event.target.value)}
+                    placeholder="0"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th align="left">
+                  <label htmlFor="rating">Rating</label>
+                </th>
+                <td>
+                  <input
+                    id="rating"
+                    required
+                    max="5"
+                    min="0"
+                    type="number"
+                    value={form.rating}
+                    onChange={(event) => updateForm("rating", event.target.value)}
+                    placeholder="0-5"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </fieldset>
 
-          <label>
-            Brand
-            <input
-              required
-              value={form.brand}
-              onChange={(event) => updateForm("brand", event.target.value)}
-              placeholder="Brand name"
-            />
-          </label>
+        {notice && <p>{notice}</p>}
+        {error && <p role="alert">{error}</p>}
 
-          <label>
-            Category
-            <input
-              required
-              value={form.category}
-              onChange={(event) => updateForm("category", event.target.value)}
-              placeholder="Electronics, grocery, books..."
-            />
-          </label>
-
-          <label>
-            Price
-            <input
-              required
-              min="0"
-              type="number"
-              value={form.price}
-              onChange={(event) => updateForm("price", event.target.value)}
-              placeholder="0"
-            />
-          </label>
-
-          <label>
-            Stock Quantity
-            <input
-              required
-              min="0"
-              type="number"
-              value={form.stock}
-              onChange={(event) => updateForm("stock", event.target.value)}
-              placeholder="0"
-            />
-          </label>
-
-          <label>
-            Rating
-            <input
-              required
-              max="5"
-              min="0"
-              type="number"
-              value={form.rating}
-              onChange={(event) => updateForm("rating", event.target.value)}
-              placeholder="0-5"
-            />
-          </label>
-        </div>
-
-        {notice && <p className="form-notice">{notice}</p>}
-        {error && <p className="form-error">{error}</p>}
-
-        <div className="form-footer">
-          <button className="primary-action" disabled={isSaving} type="submit">
+        <p>
+          <button disabled={isSaving} type="submit">
             {isSaving ? "Saving..." : "Save Inventory"}
-          </button>
-          <button
-            className="ghost-action"
-            type="button"
-            onClick={() => navigate("/products")}
-          >
+          </button>{" "}
+          <button type="button" onClick={() => navigate("/products")}>
             Back to Dashboard
           </button>
-        </div>
+        </p>
       </form>
     </section>
   );

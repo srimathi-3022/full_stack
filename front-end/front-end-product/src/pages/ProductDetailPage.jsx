@@ -26,72 +26,57 @@ export default function ProductDetailPage() {
   };
 
   if (isLoading) {
-    return (
-      <section className="inventory-page">
-        <div className="detail-page-shell skeleton-panel">
-          <div className="skeleton-line skeleton-title" />
-          <div className="skeleton-line skeleton-copy" />
-        </div>
-      </section>
-    );
+    return <p>Loading product...</p>;
   }
 
   if (error || !product) {
     return (
-      <div className="catalog-state catalog-state-error">
-        <p>Error: {error || "Product not found"}</p>
-        <Link className="ghost-action" to="/products">Back to Dashboard</Link>
-      </div>
+      <section>
+        <h2>Error</h2>
+        <p>{error || "Product not found"}</p>
+        <Link to="/products">Back to Dashboard</Link>
+      </section>
     );
   }
 
   return (
-    <section className="inventory-page">
-      <div className="detail-page-shell">
-        <div className="detail-page-header">
-          <Link className="ghost-action" to="/products">
-            Back to Dashboard
-          </Link>
-          <span className="detail-status">
-            {product.stock === 0 ? "Out of Stock" : "In Stock"}
-          </span>
-        </div>
+    <section>
+      <p>
+        <Link to="/products">Back to Dashboard</Link>
+      </p>
 
-        <div className="detail-record">
-          <div className="detail-record-main">
-            <span className="panel-kicker">Product #{product.id}</span>
-            <h1>{product.name}</h1>
-            <p>{product.brand}</p>
-          </div>
+      <h1>{product.name}</h1>
+      <p>{product.stock === 0 ? "Out of Stock" : "In Stock"}</p>
 
-          <div className="detail-square-card">
-            <div className="detail-top">
-              <span>Inventory</span>
-              <strong>{product.rating} / 5</strong>
-            </div>
-            <h2>{product.name}</h2>
-            <p>{product.category}</p>
-            <div className="detail-grid">
-              <div>
-                <span>Brand</span>
-                <strong>{product.brand}</strong>
-              </div>
-              <div>
-                <span>Price</span>
-                <strong>{formatPrice(product.price)}</strong>
-              </div>
-              <div>
-                <span>Stock</span>
-                <strong>{product.stock} units</strong>
-              </div>
-              <div>
-                <span>Product ID</span>
-                <strong>#{product.id}</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <table border="1" cellPadding="10" cellSpacing="0">
+        <caption>Product Details</caption>
+        <tbody>
+          <tr>
+            <th scope="row">Product ID</th>
+            <td>#{product.id}</td>
+          </tr>
+          <tr>
+            <th scope="row">Brand</th>
+            <td>{product.brand}</td>
+          </tr>
+          <tr>
+            <th scope="row">Category</th>
+            <td>{product.category}</td>
+          </tr>
+          <tr>
+            <th scope="row">Price</th>
+            <td>{formatPrice(product.price)}</td>
+          </tr>
+          <tr>
+            <th scope="row">Stock</th>
+            <td>{product.stock} units</td>
+          </tr>
+          <tr>
+            <th scope="row">Rating</th>
+            <td>{product.rating} / 5</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
   );
 }

@@ -5,6 +5,7 @@ import {
   fetchProductsByCategory,
   formatPrice,
 } from "../services/productService";
+import CategoryFilter from "../components/CategoryFilter";
 
 const sortOptions = [
   { value: "id", label: "ID" },
@@ -93,155 +94,126 @@ export default function ProductListPage() {
 
   if (isLoading) {
     return (
-      <section className="inventory-page">
-        <div className="catalog-hero skeleton-panel">
-          <div className="skeleton-line skeleton-title" />
-          <div className="skeleton-line skeleton-copy" />
-        </div>
+      <section>
+        <h1>Stockyard Dashboard</h1>
+        <p>Loading inventory...</p>
       </section>
     );
   }
 
   if (error && products.length === 0) {
     return (
-      <div className="catalog-state catalog-state-error">
-        <p>Error: {error}</p>
+      <section>
+        <h2>Error</h2>
+        <p>{error}</p>
         <button onClick={loadAll}>Retry</button>
-      </div>
+      </section>
     );
   }
 
   return (
-    <section className="inventory-page">
-      <div className="catalog-hero">
-        <div>
-          <span className="catalog-kicker">Inventory Management</span>
-          <h1>Stockyard Dashboard</h1>
+    <section>
+      <h1>Stockyard Dashboard</h1>
+
+      <table border="1" cellPadding="10" cellSpacing="0" width="100%">
+        <caption>Inventory Summary</caption>
+        <thead>
+          <tr>
+            <th>Items</th>
+            <th>Units</th>
+            <th>Alerts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{products.length}</td>
+            <td>{totalStock}</td>
+            <td>{lowStockCount + outOfStockCount}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        <Link to="/products/add">Add Stock</Link>
+      </p>
+
+      <hr />
+
+      <section>
+        <h2>All Inventory Items</h2>
+
+        <fieldset>
+          <legend>Search and Sort</legend>
           <p>
-            Search products by ID or category, select an item for its record,
-            and open full product details on a dedicated page.
-          </p>
-        </div>
-
-        <div className="catalog-stats" aria-label="Inventory summary">
-          <div>
-            <strong>{products.length}</strong>
-            <span>Items</span>
-          </div>
-          <div>
-            <strong>{totalStock}</strong>
-            <span>Units</span>
-          </div>
-          <div>
-            <strong>{lowStockCount + outOfStockCount}</strong>
-            <span>Alerts</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="inventory-grid">
-        <div className="inventory-main">
-          <div className="dashboard-panel">
-            <div className="panel-header">
-              <div>
-                <span className="panel-kicker">Product List</span>
-                <h2>All Inventory Items</h2>
-              </div>
-              <div className="panel-actions">
-                <Link className="secondary-action" to="/products/add">
-                  Add Stock
-                </Link>
-                <label className="sort-control">
-                  <span>Sort</span>
-                  <select
-                    className="sort-select"
-                    value={sortBy}
-                    onChange={(event) => setSortBy(event.target.value)}
-                  >
-                    {sortOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-            </div>
-
-            <div className="inventory-search-row">
+            <label>
+              Search{" "}
               <input
-                className="inventory-search"
                 type="search"
                 value={inventorySearch}
                 onChange={(event) => setInventorySearch(event.target.value)}
                 placeholder="Search by ID, category, product, or brand"
               />
-              <span>{visibleProducts.length} results</span>
-            </div>
+            </label>
+          </p>
 
-            <div className="category-strip" aria-label="Product categories">
-              <button
-                className={`category-chip ${activeCategory === null ? "is-active" : ""}`}
-                onClick={() => handleCategory(null)}
+          <p>
+            <label>
+              Sort{" "}
+              <select
+                value={sortBy}
+                onChange={(event) => setSortBy(event.target.value)}
               >
-                All
-              </button>
-              {categories.map((cat) => (
-                <button
-                  className={`category-chip ${activeCategory === cat ? "is-active" : ""}`}
-                  key={cat}
-                  onClick={() => handleCategory(cat)}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+                {sortOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </p>
+        </fieldset>
 
-            <div className="inventory-table" role="table" aria-label="Inventory products">
-              <div className="inventory-table-row inventory-table-head" role="row">
-                <span>ID</span>
-                <span>Product</span>
-                <span>Category</span>
-                <span>Stock</span>
-                <span>Price</span>
-              </div>
+        <p>{visibleProducts.length} results</p>
 
-              {visibleProducts.map((product) => (
-                <Link
-                  className="inventory-table-row"
-                  key={product.id}
-                  to={`/products/${product.id}`}
-                  role="row"
-                >
-                  <span>#{product.id}</span>
-                  <span>
-                    <strong>{product.name}</strong>
-                    <small>{product.brand}</small>
-                  </span>
-                  <span>{product.category}</span>
-                  <span className={product.stock <= 5 ? "stock-alert" : ""}>
-                    {product.stock}
-                  </span>
-                  <span>{formatPrice(product.price)}</span>
-                </Link>
-              ))}
-            </div>
+        <CategoryFilter
+          active={activeCategory}
+          allValue={null}
+          categories={categories}
+          onChange={handleCategory}
+        />
 
-            {visibleProducts.length === 0 && (
-              <div className="inline-empty">No inventory items match your search.</div>
-            )}
-          </div>
-        </div>
+        <table border="1" cellPadding="8" cellSpacing="0" width="100%">
+          <caption>Products</caption>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Product</th>
+              <th>Brand</th>
+              <th>Category</th>
+              <th>Stock</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {visibleProducts.map((product) => (
+              <tr key={product.id}>
+                <td>#{product.id}</td>
+                <td>
+                  <Link to={`/products/${product.id}`}>{product.name}</Link>
+                </td>
+                <td>{product.brand}</td>
+                <td>{product.category}</td>
+                <td>{product.stock <= 5 ? `${product.stock} alert` : product.stock}</td>
+                <td>{formatPrice(product.price)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-        <aside className="inventory-side">
-          <div className="detail-box">
-            <span className="panel-kicker">Product Details</span>
-            <p className="detail-empty">
-              Click any product row to open the full inventory record.
-            </p>
-          </div>
-        </aside>
-      </div>
+        {visibleProducts.length === 0 && (
+          <p>No inventory items match your search.</p>
+        )}
+      </section>
     </section>
   );
 }
