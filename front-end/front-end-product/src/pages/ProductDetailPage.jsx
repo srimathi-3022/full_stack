@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { fetchProductById, formatPrice } from "../services/productService";
+import Spinner from "./Spinner";
 
 export default function ProductDetailPage() {
   const { id } = useParams();
@@ -26,7 +27,7 @@ export default function ProductDetailPage() {
   };
 
   if (isLoading) {
-    return <p>Loading product...</p>;
+    return <Spinner message="Loading product..." />;
   }
 
   if (error || !product) {

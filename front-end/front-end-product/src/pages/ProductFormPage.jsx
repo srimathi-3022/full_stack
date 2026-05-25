@@ -131,7 +131,6 @@ export default function ProductFormPage() {
                   <input
                     id="stock"
                     required
-                    min="0"
                     type="number"
                     value={form.stock}
                     onChange={(event) => updateForm("stock", event.target.value)}

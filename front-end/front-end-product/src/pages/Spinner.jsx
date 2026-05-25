@@ -1,7 +1,7 @@
 import React from "react";
 
-export default function Spinner() {
+export default function Spinner({ message = "Loading..." }) {
   return (
-    <p>Loading...</p>
+    <p>{message}</p>
   );
 }

@@ -6,6 +6,7 @@ import {
   formatPrice,
 } from "../services/productService";
 import CategoryFilter from "../components/CategoryFilter";
+import Spinner from "./Spinner";
 
 const sortOptions = [
   { value: "id", label: "ID" },
@@ -96,7 +97,7 @@ export default function ProductListPage() {
     return (
       <section>
         <h1>Stockyard Dashboard</h1>
-        <p>Loading inventory...</p>
+        <Spinner message="Loading inventory..." />
       </section>
     );
   }
