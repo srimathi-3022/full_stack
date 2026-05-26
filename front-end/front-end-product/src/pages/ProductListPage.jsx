@@ -85,7 +85,7 @@ export default function ProductListPage() {
 
   const totalStock = products.reduce((sum, product) => sum + product.stock, 0);
   const lowStockCount = products.filter(
-    (product) => product.stock > 0 && product.stock <= 5
+    (product) => product.stock > 0 && product.stock <= 25
   ).length;
   const outOfStockCount = products.filter((product) => product.stock === 0).length;
 
@@ -200,7 +200,7 @@ export default function ProductListPage() {
                 </td>
                 <td>{product.brand}</td>
                 <td>{product.category}</td>
-                <td>{product.stock <= 5 ? `${product.stock} alert` : product.stock}</td>
+                <td>{product.stock <= 25 ? `${product.stock} alert` : product.stock}</td>
                 <td>{formatPrice(product.price)}</td>
               </tr>
             ))}

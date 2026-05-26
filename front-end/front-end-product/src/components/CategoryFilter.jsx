@@ -43,7 +43,7 @@ export default function CategoryFilter({
 function FilterBtn({ label, active, onClick }) {
   return (
     <button onClick={onClick} aria-pressed={active}>
-      {active ? `${label} (selected)` : label}
+      {active ? `${label} (selected)` : `${label} (unselected)`}
     </button>
   );
 }
